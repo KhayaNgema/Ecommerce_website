@@ -1,0 +1,79 @@
+﻿@model Ecommerce_website.Models.LoginViewModel
+@{
+    ViewData["Title"] = "Log in";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .btn-login {
+        background-color: #48AAAD;
+        color: white;
+        border-radius: 25px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        padding: 0.7rem;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-login:hover {
+            background-color: #369a9a;
+            box-shadow: 0 4px 15px rgba(72, 170, 173, 0.4);
+        }
+</style>
+
+<div class="login-page-background" style="margin-top: 0; margin-left: 0;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-8 col-lg-6">
+                <div class="login-card shadow p-4">
+                    <div class="container-fluid text-center">
+                        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                            <img src="~/UploadedFiles/ecommerce_logo.png" alt="Logo" style="height: 90px; width:90px; border-radius:50%;">
+                        </a>
+                    </div>
+                    <h3 class="text-center">Login</h3>
+
+                    @if (!string.IsNullOrEmpty(TempData["JWToken"]?.ToString()))
+                    {
+                        <div class="alert alert-info">
+                            <strong>JWT Token:</strong> @TempData["JWToken"]
+                        </div>
+                    }
+
+                    <form asp-action="Login" method="post" novalidate>
+                        <div class="mb-4">
+                            <label asp-for="EmailOrPhone" class="form-label fw-semibold"></label>
+                            <input asp-for="EmailOrPhone" class="form-control" />
+                            <span asp-validation-for="EmailOrPhone" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Password" class="form-label fw-semibold"></label>
+                            <input asp-for="Password" class="form-control" type="password" />
+                            <span asp-validation-for="Password" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input asp-for="RememberMe" class="form-check-input" />
+                            <label asp-for="RememberMe" class="form-check-label"></label>
+                        </div>
+
+                        <div class="d-grid mb-4">
+                            <button type="submit" class="btn btn-login">Login</button>
+                        </div>
+
+                        <div class="text-end small">
+                            <p><a href="#">Forgot your password?</a></p>
+                        </div>
+                    </form>
+
+                    <div asp-validation-summary="All" class="text-danger mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
