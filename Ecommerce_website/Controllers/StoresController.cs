@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text.Json;
 using Ecommerce_website.Models;
+using Ecommerce_website.ViewModels;
 
 public class StoresController : Controller
 {
@@ -45,5 +46,17 @@ public class StoresController : Controller
         });
 
         return View(stores);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> NewStore()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> NewStore(NewStoreViewModel viewModel)
+    {
+        return Ok();
     }
 }
