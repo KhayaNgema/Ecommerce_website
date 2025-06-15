@@ -88,10 +88,8 @@ public class AccountsController : Controller
             return View(model);
         }
 
-        // Store user info json in session
         HttpContext.Session.SetString("CurrentUser", userJson);
 
-        // Now just redirect without SignInAsync
         return RedirectToAction("Index", "Home");
     }
 

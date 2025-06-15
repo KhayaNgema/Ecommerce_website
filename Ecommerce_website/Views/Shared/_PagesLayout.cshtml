@@ -237,6 +237,167 @@
                     </div>
                 </div>
             }
+        @if (user.Roles != null && user.Roles.Contains("Store Owner"))
+        {
+            <div id="wrapper">
+                <div id="sidebar-wrapper" style="overflow-y: auto; scrollbar-width: thin; scrollbar-color: transparent transparent;">
+                    <div style="padding: 30px; margin-top:0; background-color: #022D36; color: white; position: sticky; top: 0; z-index: 1; text-align: center;">
+                        <img src="@Url.Content("~/" + user.ProfilePicture)" alt="Profile Photo" style="width: 70px; height: 70px; border-radius: 50%; margin: 0 auto; object-fit: cover;" />
+                        <div style="margin-top: 10px;">
+                            <div style="font-size: 16px; font-weight: bold;">@firstName @lastName</div>
+                            <div style="font-size: 14px; color: #ccc;">@userRole</div>
+                        </div>
+                        <button style="background-color: transparent; border: 1px solid #48AAAD; color: #48AAAD; padding: 4px 9px; border-radius: 5px; font-size: 14px; cursor: pointer; margin-top: 10px;">
+                            <a style="color:#48AAAD" asp-controller="Users" asp-action="UserProfile" asp-route-userId="@encryptedUserId">Profile <i class="fa fa-arrow-right"></i></a>
+                        </button>
+                    </div>
+
+                    <ul class="sidebar-nav" style="list-style: none; padding: 0;">
+
+                        <li style="margin: 20px 0 0 30px; display: flex; align-items: center; cursor:pointer;">
+                            <i class="fa fa-home fa-lg" style="color: white; margin-right: 10px;"></i>
+                            <a asp-controller="Home" asp-action="Index" class="nav-link text-light" style="font-weight: bold;">Dashboard</a>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#storeMgmtSubmenu" aria-expanded="false" aria-controls="storeMgmtSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-store fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Store & Product Management</span>
+                                </div>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="storeMgmtSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Stores" asp-action="Stores" class="nav-link text-light">My Stores</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Products" asp-action="Index" class="nav-link text-light">Products</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Categories" asp-action="Index" class="nav-link text-light">Categories</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Inventory" asp-action="Index" class="nav-link text-light">Inventory</a></li>
+                            </ul>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#ordersSubmenu" aria-expanded="false" aria-controls="ordersSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-shopping-cart fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Orders</span>
+                                </div>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="ordersSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Orders" asp-action="Index" class="nav-link text-light">All Orders</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Orders" asp-action="Pending" class="nav-link text-light">Pending Orders</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Orders" asp-action="Completed" class="nav-link text-light">Completed Orders</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Orders" asp-action="Returns" class="nav-link text-light">Returns & Refunds</a></li>
+                            </ul>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#customersSubmenu" aria-expanded="false" aria-controls="customersSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-users fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Customers</span>
+                                </div>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="customersSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Customers" asp-action="Index" class="nav-link text-light">Customer List</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Reviews" asp-action="Index" class="nav-link text-light">Reviews & Feedback</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Loyalty" asp-action="Index" class="nav-link text-light">Loyalty Programs</a></li>
+                            </ul>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#marketingSubmenu" aria-expanded="false" aria-controls="marketingSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-bullhorn fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Marketing & Promotions</span>
+                                </div>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="marketingSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Coupons" asp-action="Index" class="nav-link text-light">Coupons & Discounts</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="EmailCampaigns" asp-action="Index" class="nav-link text-light">Email Campaigns</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="SocialMedia" asp-action="Index" class="nav-link text-light">Social Media</a></li>
+                            </ul>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li style="margin: 20px 0 0 30px; display: flex; align-items: center;">
+                            <i class="fa fa-chart-line fa-lg" style="color: white; margin-right: 10px;"></i>
+                            <a asp-controller="Reports" asp-action="Index" class="nav-link text-light" style="font-weight: bold;">Reports & Analytics</a>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#billingSubmenu" aria-expanded="false" aria-controls="billingSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-file-invoice-dollar fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Billing & Finance</span>
+                                </div>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="billingSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Invoices" asp-action="Outbound" class="nav-link text-light">Outbound Invoices</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Transactions" asp-action="Index" class="nav-link text-light">Transactions</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Payments" asp-action="Index" class="nav-link text-light">Payments</a></li>
+                            </ul>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#vehicleMgmtSubmenu" aria-expanded="false" aria-controls="vehicleMgmtSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-motorcycle fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Vehicle Management</span>
+                                </div>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="vehicleMgmtSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Bikes" asp-action="Index" class="nav-link text-light">My Bikes</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Drivers" asp-action="Index" class="nav-link text-light">Bike Drivers</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="BikeMaintenance" asp-action="Index" class="nav-link text-light">Maintenance Records</a></li>
+                            </ul>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li style="margin-top: 20px; margin-left: 30px; display: flex; align-items: center; list-style-type: none;">
+                            <i class="fa fa-cogs fa-lg" style="color: white; margin-right: 10px;"></i>
+                            <a asp-controller="Settings" asp-action="Index" class="nav-link text-light" style="font-weight: bold;">Settings</a>
+                        </li>
+
+                        <li style="margin-top: 20px; margin-left: 30px; display: flex; align-items: center; list-style-type: none;">
+                            <i class="fa fa-shield-alt fa-lg" style="color: white; margin-right: 5px;"></i>
+                            <a asp-controller="Users" asp-action="Account" class="nav-link text-light" style="font-weight: bold;">Account & Security</a>
+                        </li>
+
+                        <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;" />
+
+                        <li class="nav-login-item" style="margin-left: 30px; display: flex; align-items: center; cursor:pointer;">
+                            <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <i class="fa fa-sign-out-alt fa-lg" style="color: white; margin-right: 10px;"></i>
+                                <button type="submit" class="nav-login-link" style="color: white; background-color: transparent; border: none; cursor: pointer; font-weight: bold;">Logout</button>
+                            </form>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        }
+
     </header>
     <div id="loading-overlay">
         <div class="loading-container">

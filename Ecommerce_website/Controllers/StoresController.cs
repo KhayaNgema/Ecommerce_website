@@ -152,15 +152,70 @@ public class StoresController : Controller
 
 
     [HttpGet]
-    public IActionResult NewStoreOwner()
+    public async Task<IActionResult> NewStoreOwner()
     {
-        var model = new NewStoreOwnerViewModel
+        var token = HttpContext.Session.GetString("JWToken");
+
+        if (string.IsNullOrEmpty(token))
         {
-            ReturnUrl = Url.Action("StoreOwners", "Stores")
+            return RedirectToAction("Login", "Account");
+        }
+
+        var client = _httpClientFactory.CreateClient("NoSSLValidation");
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7135/api/Stores/stores");
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        try
+        {
+            var response = await client.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var stores = JsonSerializer.Deserialize<List<StoreResponse>>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                HttpContext.Session.SetString("StoresList", json ?? "[]");
+
+                var viewModel = new NewStoreOwnerViewModel
+                {
+                    Stores = stores ?? new List<StoreResponse>()
+                };
+
+                return View(viewModel);
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Unable to retrieve stores from the API.");
+            }
+        }
+        catch (Exception)
+        {
+            ModelState.AddModelError(string.Empty, "An error occurred while fetching stores.");
+        }
+
+        var storesJson = HttpContext.Session.GetString("StoresList");
+        List<StoreResponse> storedStores = new List<StoreResponse>();
+
+        if (!string.IsNullOrEmpty(storesJson))
+        {
+            storedStores = JsonSerializer.Deserialize<List<StoreResponse>>(storesJson, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            }) ?? new List<StoreResponse>();
+        }
+
+        var fallbackViewModel = new NewStoreOwnerViewModel
+        {
+            Stores = storedStores
         };
 
-        return View(model);
+        return View(fallbackViewModel);
     }
+
 
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -171,10 +226,20 @@ public class StoresController : Controller
             return View(viewModel);
         }
 
-        var client = _httpClientFactory.CreateClient();
+        var token = HttpContext.Session.GetString("JWToken");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var client = _httpClientFactory.CreateClient("NoSSLValidation");
+
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
         using var content = new MultipartFormDataContent();
 
+        content.Add(new StringContent(viewModel.Title.ToString()), "Title");
         content.Add(new StringContent(viewModel.FirstName ?? ""), "FirstName");
         content.Add(new StringContent(viewModel.LastName ?? ""), "LastName");
         content.Add(new StringContent(viewModel.Email ?? ""), "Email");
@@ -185,20 +250,26 @@ public class StoresController : Controller
         content.Add(new StringContent(viewModel.HomeLanguage.ToString()), "HomeLanguage");
 
         content.Add(new StringContent(viewModel.StreetNumber ?? ""), "StreetNumber");
+        content.Add(new StringContent(viewModel.Surbub ?? ""), "Surbub");
         content.Add(new StringContent(viewModel.City_town ?? ""), "City_town");
         content.Add(new StringContent(viewModel.Province.ToString()), "Province");
         content.Add(new StringContent(viewModel.Zip_code ?? ""), "Zip_code");
         content.Add(new StringContent(viewModel.Country ?? ""), "Country");
 
-
         if (viewModel.ProfilePicture != null && viewModel.ProfilePicture.Length > 0)
         {
             var streamContent = new StreamContent(viewModel.ProfilePicture.OpenReadStream());
-            streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(viewModel.ProfilePicture.ContentType);
+            streamContent.Headers.ContentType = new MediaTypeHeaderValue(viewModel.ProfilePicture.ContentType);
             content.Add(streamContent, "ProfilePicture", viewModel.ProfilePicture.FileName);
         }
 
-        var response = await client.PostAsync("https://localhost:7135/Stores/newStoreOwner", content); 
+        var storesList = viewModel.Stores?.ToList() ?? new List<StoreResponse>();
+        for (int i = 0; i < storesList.Count; i++)
+        {
+            content.Add(new StringContent(storesList[i].StoreId.ToString()), $"Stores[{i}].StoreId");
+        }
+
+        var response = await client.PostAsync("https://localhost:7135/api/Stores/newStoreOwner", content);
 
         if (response.IsSuccessStatusCode)
         {
@@ -212,5 +283,6 @@ public class StoresController : Controller
             return View(viewModel);
         }
     }
+
 
 }

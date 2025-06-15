@@ -30,9 +30,11 @@
 <div class="container-fluid my-3 px-4">
     <div class="row">
         <div class="col-12 col-md-8 col-lg-12">
-            <div class="login-card shadow">
-                <h1 class="app-name text-center"><span>Onboard Store Owner</span></h1>
-                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+            <div class="card shadow-lg border-0" style="border-left: 6px solid #48AAAD; border-radius: 8px; padding:20px;">
+                    <div class="card-header text-white" style="background-color: #48AAAD;">
+                        <h3 class="mb-0">ONBOARD STORE OWNER</h3>
+                    </div>
+                <form id="registerForm" method="post" enctype="multipart/form-data">
                     @Html.AntiForgeryToken()
                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
@@ -58,7 +60,13 @@
                                     <input asp-for="@Model.ProfilePicture" id="Input_ProfilePicture" type="file" accept="image/*" onchange="previewProfilePicture(event)" style="display: none;" />
                                     <span asp-validation-for="@Model.ProfilePicture" class="text-danger"></span>
                                 </div>
-
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Title"></label>
+                                    <select asp-for="@Model.Title" class="form-select" asp-items="Html.GetEnumSelectList<Title>()">
+                                        <option value="">-- Select Title --</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.Title" class="text-danger small"></span>
+                                </div>
                                 <div class="row">
                                     <div class="mb-4 col-md-6">
                                         <label asp-for="@Model.FirstName"></label>
@@ -130,6 +138,12 @@
                                     <span asp-validation-for="@Model.StreetNumber" class="text-danger small"></span>
                                 </div>
 
+                                <div class="mb-4">
+                                    <label asp-for="@Model.Surbub"></label>
+                                    <input asp-for="@Model.Surbub" class="form-control" />
+                                    <span asp-validation-for="@Model.Surbub" class="text-danger small"></span>
+                                </div>
+
                                 <div class="row">
                                     <div class="mb-4 col-md-6">
                                         <label asp-for="@Model.City_town"></label>
@@ -158,6 +172,46 @@
                                     </div>
                                 </div>
 
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-12">
+                                        <label for="categoryDropdown">Stores to assign</label>
+                                        <div class="d-flex flex-nowrap gap-2 align-items-center">
+                                            <select id="categoryDropdown" class="form-select">
+                                                <option value="">-- Select Store --</option>
+                                                @foreach (var store in Model.Stores)
+                                                {
+                                                    <option value="@store.StoreId">@store.StoreName (@store.StoreCode)</option>
+                                                }
+                                            </select>
+
+                                            <button id="addMedicationBtn" type="button" class="btn btn-success btn-md" style="flex: 0 0 33.3333%; height: auto; white-space: nowrap;">
+                                                <i class="fas fa-plus me-1"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row g-4 mb-4">
+                                    <div class="col-md-12">
+                                        <span asp-validation-for="Stores" class="text-danger small"></span>
+
+                                        <div id="medicationsContainer" class="border rounded py-2 px-3 shadow-sm mt-3" style="min-height: 100px; background-color: #f9f9f9;">
+                                        </div>
+
+                                        <div id="hiddenInputsContainer">
+                                            @{
+                                                var stores = ViewBag.Stores as List<StoreResponse> ?? new List<StoreResponse>();
+                                            }
+                                            @for (int i = 0; i < stores.Count; i++)
+                                            {
+                                                <input type="hidden" name="SelectedStores[@i].StoreId" value="@stores[i].StoreId" />
+                                                <input type="hidden" name="SelectedStores[@i].StoreName" value="@stores[i].StoreName" />
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <div class="d-grid mb-4">
                                     <button type="submit" class="btn btn-login">Onboard</button>
                                 </div>
@@ -183,6 +237,97 @@
             };
             reader.readAsDataURL(event.target.files[0]);
         }
+
+
+            document.addEventListener('DOMContentLoaded', () => {
+            const dropdown = document.getElementById('categoryDropdown');
+            const addBtn = document.getElementById('addMedicationBtn');
+            const container = document.getElementById('medicationsContainer');
+            const hiddenInputsContainer = document.getElementById('hiddenInputsContainer');
+
+        let selectedStores = [];
+
+        Array.from(hiddenInputsContainer.querySelectorAll('input[name^="SelectedStores"]'))
+            .forEach((input, index, allInputs) => {
+                const match = input.name.match(/\[(\d+)\]\.StoreId/);
+                if (match) {
+                    const storeIndex = parseInt(match[1]);
+                    const id = input.value;
+                    const nameInput = allInputs.find(el => el.name === `SelectedStores[${storeIndex}].StoreName`);
+                    if (nameInput) {
+                        selectedStores.push({ id: id, text: nameInput.value });
+                    }
+                }
+            });
+
+        function renderStores() {
+            container.innerHTML = '';
+            hiddenInputsContainer.innerHTML = '';
+
+            selectedStores.forEach((store, index) => {
+                const storePill = document.createElement('span');
+                storePill.style.backgroundColor = '#48AAAD';
+                storePill.style.color = 'white';
+                storePill.style.userSelect = 'none';
+                storePill.style.marginRight = '0.5rem';
+                storePill.style.marginBottom = '0.5rem';
+                storePill.style.display = 'inline-flex';
+                storePill.style.alignItems = 'center';
+                storePill.style.padding = '0.3rem 0.5rem';
+                storePill.style.borderRadius = '8px';
+
+                storePill.textContent = store.text;
+
+                const removeBtn = document.createElement('button');
+                removeBtn.type = 'button';
+                removeBtn.textContent = '×';
+                removeBtn.style.marginLeft = '0.5rem';
+                removeBtn.style.background = 'none';
+                removeBtn.style.border = 'none';
+                removeBtn.style.color = 'white';
+                removeBtn.style.cursor = 'pointer';
+
+                removeBtn.addEventListener('click', () => {
+                    selectedStores = selectedStores.filter(s => s.id !== store.id);
+                    renderStores();
+                });
+
+                storePill.appendChild(removeBtn);
+                container.appendChild(storePill);
+
+                const hiddenId = document.createElement('input');
+                hiddenId.type = 'hidden';
+                hiddenId.name = `SelectedStores[${index}].StoreId`;
+                hiddenId.value = store.id;
+
+                const hiddenName = document.createElement('input');
+                hiddenName.type = 'hidden';
+                hiddenName.name = `SelectedStores[${index}].StoreName`;
+                hiddenName.value = store.text;
+
+                hiddenInputsContainer.appendChild(hiddenId);
+                hiddenInputsContainer.appendChild(hiddenName);
+            });
+        }
+
+        addBtn.addEventListener('click', () => {
+            const selectedOption = dropdown.options[dropdown.selectedIndex];
+            const id = selectedOption.value;
+            const text = selectedOption.text;
+
+            if (!id) return;
+
+            if (selectedStores.some(s => s.id === id)) {
+                alert("Store already added.");
+                return;
+            }
+
+            selectedStores.push({ id, text });
+            renderStores();
+        });
+
+        renderStores();
+        });
     </script>
     <partial name="_ValidationScriptsPartial" />
 }

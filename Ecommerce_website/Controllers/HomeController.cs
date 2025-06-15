@@ -76,8 +76,8 @@ public class HomeController : Controller
 
         if (roles.Contains("System Administrator"))
             return View("AdminDashboard");
-        if (roles.Contains("Doctor"))
-            return View("DoctorDashboard");
+        if (roles.Contains("Store Owner"))
+            return View("StoreOwnerDashboard");
         if (roles.Contains("Paramedic"))
             return View("ParamedicDashboard");
         if (roles.Contains("Kitchen Staff"))
