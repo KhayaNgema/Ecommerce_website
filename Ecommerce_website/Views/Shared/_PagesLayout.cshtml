@@ -32,10 +32,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>@ViewData["Title"] - MediConnect</title>
+    <title>@ViewData["Title"] - Ecommerce</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/HospitalManagement.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Ecommerce_website.styles.css" asp-append-version="true" />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -162,28 +162,19 @@
 
                             <hr style="background-color: white; opacity: 0.2; margin: 15px 20px; ">
 
-                            <li style="margin-left: 30px; cursor:pointer;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#inventorySubmenu" aria-expanded="false" aria-controls="inventorySubmenu" style="cursor: pointer;">
-                                    <div style="display: flex; align-items: center;">
-                                        <i class="fa fa-pills fa-lg" style="color: white; margin-right: 10px;"></i>
-                                        <span class="nav-link text-light" style="font-weight: bold;">Inventory</span>
-                                    </div>
-                                    <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#storesSubmenu" aria-expanded="false" aria-controls="storesSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-store fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Store management</span>
                                 </div>
-                                <ul class="collapse list-unstyled collapsible-menu" id="inventorySubmenu" style="margin-left: 35px;">
-                                    <li style="margin-top: 10px;"><a asp-controller="Medications" asp-action="Medications" class="nav-link text-light">Medication</a></li>
-                                    <li style="margin-top: 10px;"><a asp-controller="Menus" asp-action="MenuItems" class="nav-link text-light">Meals</a></li>
-                                    <li style="margin-top: 10px;"><a asp-controller="Categories" asp-action="Categories" class="nav-link text-light">Medication categories</a></li>
-                                    <li style="margin-top: 10px;"><a asp-controller="Categories" asp-action="Categories" class="nav-link text-light">Meals categories</a></li>
-                                </ul>
-                            </li>
-
-                            <hr style="background-color: white; opacity: 0.2; margin: 15px 20px; cursor:pointer;">
-
-                            <li style="margin: 20px 0 0 30px; display: flex; align-items: center;">
-                                <i class="fa fa-bed fa-lg" style="color: white; margin-right: 10px;"></i>
-                                <a asp-controller="Stores" asp-action="Stores" class="nav-link text-light" style="font-weight: bold;">Store Management</a>
-                            </li>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="storesSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Stores" asp-action="Stores" class="nav-link text-light">Stores</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Stores" asp-action="StoreOwners" class="nav-link text-light">Store owners</a></li>
+                            </ul>
+                        </li>
 
 
                             <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;">
@@ -211,20 +202,19 @@
 
                             <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;">
 
-                            <li style="margin-left: 30px; cursor:pointer;">
-                                <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#auditsSubmenu" aria-expanded="false" aria-controls="auditsSubmenu" style="cursor: pointer;">
-                                    <div style="display: flex; align-items: center;">
-                                        <i class="fa fa-history fa-lg" style="color: white; margin-right: 10px;"></i>
-                                        <span class="nav-link text-light" style="font-weight: bold;">Activity logs & Audits</span>
-                                    </div>
-                                    <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                        <li style="margin-left: 30px; cursor:pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;" data-toggle="collapse" data-target="#auditsSubmenu" aria-expanded="false" aria-controls="auditsSubmenu" style="cursor: pointer;">
+                                <div style="display: flex; align-items: center;">
+                                    <i class="fa fa-history fa-lg" style="color: white; margin-right: 10px;"></i>
+                                    <span class="nav-link text-light" style="font-weight: bold;">Activity logs & Audits</span>
                                 </div>
-                                <ul class="collapse list-unstyled collapsible-menu" id="auditsSubmenu" style="margin-left: 35px;">
-                                    <li style="margin-top: 10px;"><a asp-controller="ActivityLogs" asp-action="ActivityLogs" class="nav-link text-light">Staff</a></li>
-                                    <li style="margin-top: 10px;"><a asp-controller="ActivityLogs" asp-action="PatientsActivityLogs" class="nav-link text-light">Patients</a></li>
-                                    <li style="margin-top: 10px;"><a asp-controller="ActivityLogs" asp-action="MyActivityLogs" class="nav-link text-light">Myself</a></li>
-                                </ul>
-                            </li>
+                                <i class="fa fa-chevron-down caret-rotate collapsed" style="color: white; margin-right: 15px;"></i>
+                            </div>
+                            <ul class="collapse list-unstyled collapsible-menu" id="auditsSubmenu" style="margin-left: 35px;">
+                                <li style="margin-top: 10px;"><a asp-controller="Billings" asp-action="OutboundInvoices" class="nav-link text-light">Outbound Invoices</a></li>
+                                <li style="margin-top: 10px;"><a asp-controller="Billings" asp-action="Transactions" class="nav-link text-light">Transactions</a></li>
+                            </ul>
+                        </li>
 
                             <hr style="background-color: white; opacity: 0.2; margin: 15px 20px;">
 

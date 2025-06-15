@@ -86,34 +86,45 @@
                     <h6 class="card-title"><i class="fas fa-store"></i> Total Stores</h6>
                     <h4 class="card-text text-center center-number">05</h4>
                 </div>
-                <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                <span class="chevron" data-controller="Stores" data-action="Stores">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
             </div>
         </div>
+
         <div class="col-sm-12 col-md-6 col-lg-3">
             <div class="mini-card sport-administrators-card">
                 <div class="card-body d-flex flex-column">
                     <h6 class="card-title"><i class="fas fa-box"></i> Total Orders</h6>
                     <h4 class="card-text text-center center-number">245</h4>
                 </div>
-                <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                <span class="chevron" data-controller="Orders" data-action="Index">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
             </div>
         </div>
+
         <div class="col-sm-12 col-md-6 col-lg-3">
             <div class="mini-card sport-coordinators-card">
                 <div class="card-body d-flex flex-column">
                     <h6 class="card-title"><i class="fas fa-dollar-sign"></i> Revenue (R)</h6>
                     <h4 class="card-text text-center center-number">85,000</h4>
                 </div>
-                <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                <span class="chevron" data-controller="Reports" data-action="Revenue">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
             </div>
         </div>
+
         <div class="col-sm-12 col-md-6 col-lg-3">
             <div class="mini-card sport-managers-card">
                 <div class="card-body d-flex flex-column">
                     <h6 class="card-title"><i class="fas fa-users"></i> Active Customers</h6>
                     <h4 class="card-text text-center center-number">1,230</h4>
                 </div>
-                <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                <span class="chevron" data-controller="Customers" data-action="Active">
+                    <i class="fas fa-chevron-right"></i>
+                </span>
             </div>
         </div>
     </div>
@@ -163,6 +174,18 @@
 </div>
 
 <script>
+     document.querySelectorAll('.chevron').forEach(function (chevron) {
+        chevron.style.cursor = 'pointer';
+        chevron.addEventListener('click', function () {
+            const controller = chevron.getAttribute('data-controller');
+            const action = chevron.getAttribute('data-action');
+            if (controller && action) {
+                window.location.href = `/${controller}/${action}`;
+            }
+        });
+    });
+
+
     // Monthly Sales - Line Graph
     new Chart(document.getElementById('lineChart1').getContext('2d'), {
         type: 'line',

@@ -1,0 +1,189 @@
+﻿@using Ecommerce_website.ViewModels
+@model NewStoreOwnerViewModel
+
+@{
+    ViewData["Title"] = "Onboard Store Owner";
+    Layout = "~/Views/Shared/_PagesLayout.cshtml";
+}
+
+<head>
+    <style>
+        .btn-login {
+            background-color: #48AAAD;
+            color: white;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            padding: 0.7rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-login:hover {
+                background-color: #369a9a;
+                box-shadow: 0 4px 15px rgba(72, 170, 173, 0.4);
+            }
+    </style>
+</head>
+<a asp-controller="Stores" asp-action="StoreOwners" class="text-dark text-decoration-none d-inline-flex align-items-center back-link my-3 me-3">
+    <i class="bi bi-chevron-left me-1"></i> Back
+</a>
+<div class="container-fluid my-3 px-4">
+    <div class="row">
+        <div class="col-12 col-md-8 col-lg-12">
+            <div class="login-card shadow">
+                <h1 class="app-name text-center"><span>Onboard Store Owner</span></h1>
+                <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                   <div class="row">
+                       <div class="col-sm-12 col col-lg-6">
+                            <div class="w-100 mt-4 mb-3">
+                                <h3 class="px-3 py-2 bg-light" style="color:#48AAAD; border-left: 5px solid #48AAAD;">
+                                    Personal Information
+                                </h3>
+                            </div>
+
+                            <div class="form-group text-center">
+                                <div class="mb-3">
+                                    <div style="display: flex; justify-content: center; position: relative;">
+                                        <div class="profile-picture-container" style="border: 1px solid #ccc; padding: 0; border-radius: 50%; width: 120px; height: 120px; overflow: hidden; position: relative;">
+                                            <i class="fa fa-user" id="profile-image-placeholder" style="font-size: 90px; color: #f0f0f0;"></i>
+                                            <img id="profile-image-preview" alt="" class="profile-picture-image" style="border-radius: 50%; width: 100%; height: 100%; object-fit: cover; display: none;" />
+                                            <label for="Input_ProfilePicture" class="camera-icon">
+                                                <i class="fa fa-camera" style="font-size:30px;"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <small class="form-text text-muted text-center">Upload a profile picture (optional).</small>
+                                </div>
+                                <input asp-for="@Model.ProfilePicture" id="Input_ProfilePicture" type="file" accept="image/*" onchange="previewProfilePicture(event)" style="display: none;" />
+                                <span asp-validation-for="@Model.ProfilePicture" class="text-danger"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.FirstName"></label>
+                                    <input asp-for="@Model.FirstName" class="form-control" />
+                                    <span asp-validation-for="@Model.FirstName" class="text-danger small"></span>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.LastName"></label>
+                                    <input asp-for="@Model.LastName" class="form-control" />
+                                    <span asp-validation-for="@Model.LastName" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Email"></label>
+                                    <input asp-for="@Model.Email" class="form-control" />
+                                    <span asp-validation-for="@Model.Email" class="text-danger small"></span>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.PhoneNumber"></label>
+                                    <input asp-for="@Model.PhoneNumber" class="form-control" />
+                                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.DateOfBirth"></label>
+                                    <input asp-for="@Model.DateOfBirth" type="date" class="form-control" />
+                                    <span asp-validation-for="@Model.DateOfBirth" class="text-danger small"></span>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Gender"></label>
+                                    <select asp-for="@Model.Gender" class="form-select" asp-items="Html.GetEnumSelectList<Gender>()">
+                                        <option value="">-- Select Gender --</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.Gender" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Ethnicity"></label>
+                                    <select asp-for="@Model.Ethnicity" class="form-select" asp-items="Html.GetEnumSelectList<Ethnicity>()">
+                                        <option value="">-- Select Ethnicity --</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.Ethnicity" class="text-danger small"></span>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.HomeLanguage"></label>
+                                    <select asp-for="@Model.HomeLanguage" class="form-select" asp-items="Html.GetEnumSelectList<HomeLanguage>()">
+                                        <option value="">-- Select Home Language --</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.HomeLanguage" class="text-danger small"></span>
+                                </div>
+                            </div>
+                       </div>
+                        <div class="col-sm-12 col col-lg-6">
+                            <div class="w-100 mt-4 mb-3">
+                                <h3 class="px-3 py-2 bg-light" style="color:#48AAAD; border-left: 5px solid #48AAAD;">
+                                    Address Information
+                                </h3>
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="@Model.StreetNumber"></label>
+                                <input asp-for="@Model.StreetNumber" class="form-control" />
+                                <span asp-validation-for="@Model.StreetNumber" class="text-danger small"></span>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.City_town"></label>
+                                    <input asp-for="@Model.City_town" class="form-control" />
+                                    <span asp-validation-for="@Model.City_town" class="text-danger small"></span>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Province"></label>
+                                    <select asp-for="@Model.Province" class="form-select" asp-items="Html.GetEnumSelectList<Province>()">
+                                        <option value="">-- Select Province --</option>
+                                    </select>
+                                    <span asp-validation-for="@Model.Province" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Zip_code"></label>
+                                    <input asp-for="@Model.Zip_code" class="form-control" />
+                                    <span asp-validation-for="@Model.Zip_code" class="text-danger small"></span>
+                                </div>
+                                <div class="mb-4 col-md-6">
+                                    <label asp-for="@Model.Country"></label>
+                                    <input asp-for="@Model.Country" class="form-control" />
+                                    <span asp-validation-for="@Model.Country" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mb-4">
+                                <button type="submit" class="btn btn-login">Onboard</button>
+                            </div>
+                         </div>
+                   </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewProfilePicture(event) {
+            var reader = new FileReader();
+            reader.onload = function () {
+                var output = document.getElementById('profile-image-preview');
+                output.src = reader.result;
+                output.style.display = 'block';
+                document.getElementById('profile-image-placeholder').style.display = 'none';
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}
