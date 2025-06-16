@@ -3,18 +3,57 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Security.Claims;
+using System.Net.Http.Headers;
+using Ecommerce_website.Interfaces;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IEncryptionService _encryptionService;
 
     public HomeController(ILogger<HomeController> logger,
-        IHttpClientFactory httpClientFactory)
+         IEncryptionService encryptionService,
+         IHttpClientFactory httpClientFactory)
     {
         _logger = logger;
         _httpClientFactory = httpClientFactory;
+        _encryptionService = encryptionService;
     }
+
+    public async Task<IActionResult> StoreDashboard(string storeId)
+    {
+        var token = HttpContext.Session.GetString("JWToken");
+
+        if (string.IsNullOrEmpty(token))
+            return RedirectToAction("Login", "Account");
+
+        var client = _httpClientFactory.CreateClient("NoSSLValidation");
+
+        var request = new HttpRequestMessage(HttpMethod.Get, $"https://localhost:7135/api/Stores/storeDetails?storeId={storeId}");
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            ModelState.AddModelError(string.Empty, "Failed to load store details.");
+            return View(new StoreDetails()); 
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        var storeDetails = JsonSerializer.Deserialize<StoreDetails>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        ViewBag.StoreName = storeDetails.StoreName;
+        ViewBag.StoreLogo = storeDetails.StoreLogo;
+
+        return View(storeDetails);
+    }
+
 
     public async Task<IActionResult> Index(string tab)
     {
@@ -28,14 +67,13 @@ public class HomeController : Controller
 
             if (user != null)
             {
-                // User info is available from session, so skip API call
 
                 ViewBag.ActiveTab = string.IsNullOrEmpty(tab) ? "sportnews" : tab;
                 return RedirectToAction("Home");
             }
         }
 
-        // No user in session, fallback to token check or show public page
+
         var token = HttpContext.Session.GetString("JWToken");
         if (string.IsNullOrEmpty(token))
         {

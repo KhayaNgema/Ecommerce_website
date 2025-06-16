@@ -16,6 +16,42 @@ public class StoresController : Controller
         _httpContextAccessor = httpContextAccessor;
     }
 
+
+    [HttpGet]
+    public async Task<IActionResult> MyStores()
+    {
+        var token = HttpContext.Session.GetString("JWToken");
+
+        if (string.IsNullOrEmpty(token))
+        {
+            return RedirectToAction("Login", "Account");
+        }
+
+        var client = _httpClientFactory.CreateClient("NoSSLValidation");
+
+        var request = new HttpRequestMessage(HttpMethod.Get, "https://localhost:7135/api/Stores/myStores");
+        request.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+        var response = await client.SendAsync(request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            ModelState.AddModelError(string.Empty, "Unable to retrieve stores from the API.");
+            return View(new List<StoreResponse>());
+        }
+
+        var json = await response.Content.ReadAsStringAsync();
+
+        var stores = JsonSerializer.Deserialize<List<StoreResponse>>(json, new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        return View(stores);
+    }
+
+
     [HttpGet]
     public async Task<IActionResult> StoreOwners()
     {
@@ -263,10 +299,10 @@ public class StoresController : Controller
             content.Add(streamContent, "ProfilePicture", viewModel.ProfilePicture.FileName);
         }
 
-        var storesList = viewModel.Stores?.ToList() ?? new List<StoreResponse>();
-        for (int i = 0; i < storesList.Count; i++)
+        for (int i = 0; i < viewModel.StoreIds.Count; i++)
         {
-            content.Add(new StringContent(storesList[i].StoreId.ToString()), $"Stores[{i}].StoreId");
+            Console.WriteLine($"Sending StoreId: {viewModel.StoreIds[i]} at index {i}");
+            content.Add(new StringContent(viewModel.StoreIds[i].ToString()), $"Stores[{i}]");
         }
 
         var response = await client.PostAsync("https://localhost:7135/api/Stores/newStoreOwner", content);

@@ -66,7 +66,7 @@ body {
     display: flex;
     justify-content: center; 
     align-items: center; 
-    height: 90vh;
+    height: 98vh;
     width: 100%;
     background-image: url('/UploadedFiles/login_background.png');
     background-size: cover;
@@ -105,42 +105,6 @@ body {
     }
 
 
-
-#loginNav {
-    background-color: #022D36;
-    color: white;
-    height: 40px;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    transition: margin-left 0.4s ease, padding-left 0.4s ease;
-}
-
-#homeTabsNav {
-    background-color: #d8d8d8;
-    color: black;
-    height: 40px;
-    border-radius: 0;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    margin-bottom: 0 !important;
-    margin-top: 0 !important;
-    width: 100%;
-    position: fixed;
-    top: 103px;
-    left: 0;
-    right: 0;
-    z-index: 999;
-    transition: margin-left 0.4s ease, padding-left 0.4s ease;
-}
-
 #homeTabsNav-lay {
     background-color: white;
     color: black;
@@ -152,7 +116,25 @@ body {
     margin-top: 0 !important;
     width: 100%;
     position: fixed;
-    top: 40px;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    transition: margin-left 0.4s ease, padding-left 0.4s ease;
+}
+
+#homeTabsNav-lay-store {
+    background-color: white;
+    color: black;
+    height: 50px;
+    border-radius: 0;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+    width: 100%;
+    position: fixed;
+    top: 0;
     left: 0;
     right: 0;
     z-index: 999;
@@ -224,7 +206,7 @@ body {
         padding-left: 0;
     }
 
-    #loginNav.shifted, #homeTabsNav.shifted, #scrollTextNav-pl.shifted, #scrollTextNav.shifted, #scrollTextNav-lay.shifted, #divisionNav.shifted, #homeTabsNav-lay.shifted, .division-button.shifted, .pages-footer.shifted {
+    #loginNav.shifted, #homeTabsNav-lay-store.shifted, #homeTabsNav.shifted, #scrollTextNav-pl.shifted, #scrollTextNav.shifted, #scrollTextNav-lay.shifted, #divisionNav.shifted, #homeTabsNav-lay.shifted, .division-button.shifted, .pages-footer.shifted {
         margin-left: 0px;
         padding-left: 285px;
     }
@@ -269,7 +251,7 @@ body {
     }
 
 
-    #loginNav.shifted, #homeTabsNav.shifted, #scrollTextNav-pl.shifted, #scrollTextNav.shifted, #scrollTextNav-lay.shifted, #divisionNav.shifted, #homeTabsNav-lay.shifted, .division-button.shifted, .pages-footer.shifted {
+    #loginNav.shifted, #homeTabsNav.shifted, #homeTabsNav-lay-store.shifted, #scrollTextNav-pl.shifted, #scrollTextNav.shifted, #scrollTextNav-lay.shifted, #divisionNav.shifted, #homeTabsNav-lay.shifted, .division-button.shifted, .pages-footer.shifted {
         margin-left: 0px;
         padding-left: 225px;
     }

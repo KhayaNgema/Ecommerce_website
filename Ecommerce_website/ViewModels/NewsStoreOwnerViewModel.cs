@@ -41,6 +41,8 @@ namespace Ecommerce_website.ViewModels
 
         public ICollection<StoreResponse> Stores { get; set; } = new List<StoreResponse>();
 
+        public List<int> StoreIds { get; set; } = new List<int>();
+
         public Gender? Gender { get; set; }
 
         public Ethnicity? Ethnicity { get; set; }
